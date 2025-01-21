@@ -8,8 +8,6 @@ public class Utilities {
 
         public static HashMap<Character, ArrayList<String>> grids(long noofSeats, String grid )
         {
-//            ArrayList<User> users = BookMyShow.getUsers();
-
             var gridss = grid.split("\\*");
             int sumofGrids = 0;
             for(String grids:gridss)
