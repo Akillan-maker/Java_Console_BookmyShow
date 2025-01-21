@@ -22,8 +22,8 @@ public class UserActions {
             }
         }
         System.out.println("Your ID does not Exists...");
-        System.out.println("Enter Password to create new ID...\n");
-        System.out.println("Create Password: ");
+        System.out.println("Enter Password to create new ID...");
+        System.out.println("New Password: ");
         String newpass=scan.nextLine();
         BookMyShow.getUsers().add(new User(username,newpass));
         System.out.println("Account Created Successfully...");

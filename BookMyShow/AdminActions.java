@@ -1,6 +1,7 @@
 package BookMyShow;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class AdminActions {
@@ -67,34 +68,59 @@ public class AdminActions {
         for(String l:BookMyShow.getLocations()){
             System.out.println(l);
         }
-        return;
     }
 
-    public static void addTheatre(Scanner scan){
+    public static void addTheatre(Scanner scan) {
 
         System.out.println("Theatre name: ");
-        String tname=scan.nextLine();
-        for(Theatre theatre:BookMyShow.getTheatres()){
+        String tname= scan.nextLine();
+        for(String theatre:BookMyShow.getTheatreHashMap().keySet()){
             if(theatre.equals(tname)){
+
                 System.out.println("Theatre Already exists...");
                 return;
             }
         }
         System.out.println("Location: ");
-        String loc=scan.nextLine();
+        String loc= scan.nextLine();
         for(String l:BookMyShow.getLocations()){
             if(l.equals(loc)){
-                System.out.println("Screen: ");
-                String scr_no= scan.nextLine();
-                System.out.println("No.of Seats: ");
-                String seats= scan.nextLine();
-                Theatre.getScreens().add(new Screens(scr_no,seats));
-                BookMyShow.getTheatres().add(new Theatre(tname,loc));
-                System.out.println("Theatre Added Successfully...");
-                return;
+                System.out.println("No.of Screens: ");
+                int srcs= Integer.parseInt(scan.nextLine());
+                HashMap<String,Screens> screensHashMap=new HashMap<>();
+                for(int i=0;i<srcs;i++){
+                    System.out.println("Screen name: ");
+                    String src= scan.nextLine();
+                    for(var s:Theatre.getScreensHashMap().keySet()){
+                        if(s.equals(src)){
+                            System.out.println("Screen Already exists...");
+                            return;
+                        }
+                    }
+                    System.out.println("No.of seats: ");
+                    int seats=Integer.parseInt(scan.nextLine());
+                    System.out.println("Enter Grids: ");
+                    String grids= scan.nextLine();
+                    var nseats=Utilities.grids(seats,grids);
+                    Screens scrObj = new Screens(src,seats,grids,nseats);
+                    Theatre.getScreensHashMap().put(src,scrObj);
+
+                    Theatre theatres = new Theatre(tname,loc,screensHashMap);
+                    BookMyShow.getTheatreHashMap().put(tname,theatres);
+
+//                    for(String theatre:BookMyShow.getTheatreHashMap().keySet()){
+//                        System.out.println(theatre);
+//                    }
+//                    for(Map.Entry<String,Screens> screens:Theatre.getScreensHashMap().entrySet()){
+//                        System.out.println(screens.getKey()+screens.getValue());
+//                    }
+                    for(var seatss:nseats.entrySet()){
+                        System.out.println(seatss.getKey()+" "+seatss.getValue());
+                        return;
+                    }
+                }
             }
         }
         System.out.println("Location Not Found...");
-        return;
     }
 }

@@ -9,7 +9,7 @@ public class BookMyShowActions {
         BookMyShow.getUsers().add(new User("u1","1"));
 
         while(true){
-            System.out.println("1.Admin\n2.User\n3.Exit\nYou are: \n");
+            System.out.println("1.Admin\n2.User\n3.Exit\nYou are: ");
             int choice=Integer.parseInt(scan.nextLine());
 
             switch (choice){

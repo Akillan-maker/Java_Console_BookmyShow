@@ -1,22 +1,25 @@
 package BookMyShow;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Theatre {
     public String theatreName;
     public String location;
-    public static ArrayList<Screens> screens=new ArrayList<>();
+    public static HashMap<String,Screens> screensHashMap=new HashMap<>();
 
-    public Theatre(String theatreName,String location){
+    public Theatre(String theatreName,String location,HashMap<String,Screens> screensHashMap){
 
+//        this.screens=screens;
+        this.screensHashMap=screensHashMap;
         this.theatreName=theatreName;
         this.location=location;
 
     }
 
-    public static ArrayList<Screens> getScreens() {
+    public static HashMap<String,Screens> getScreensHashMap() {
 
-        return screens;
+        return screensHashMap;
 
     }
 
