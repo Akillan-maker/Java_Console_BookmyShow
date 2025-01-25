@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class Theatre {
     public String theatreName;
     public String location;
-    public static HashMap<String,Screens> screensHashMap=new HashMap<>();
+    public  HashMap<String,Screens> screensHashMap=new HashMap<>();
 
     public Theatre(String theatreName,String location,HashMap<String,Screens> screensHashMap){
 
@@ -17,7 +17,7 @@ public class Theatre {
 
     }
 
-    public static HashMap<String,Screens> getScreensHashMap() {
+    public HashMap<String,Screens> getScreensHashMap() {
 
         return screensHashMap;
 

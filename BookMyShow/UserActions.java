@@ -23,13 +23,22 @@ public class UserActions {
         }
         System.out.println("Your ID does not Exists...");
         System.out.println("Enter Password to create new ID...");
+        System.out.println("Enter your location: ");
+        String userloc=scan.nextLine();
         System.out.println("New Password: ");
         String newpass=scan.nextLine();
-        BookMyShow.getUsers().add(new User(username,newpass));
+        BookMyShow.getUsers().add(new User(username,userloc,newpass));
         System.out.println("Account Created Successfully...");
         for(User users:BookMyShow.getUsers()){
             System.out.println(users.getUserId());
         }
         return null;
+        }
+
+        public static void changeDetails(Scanner scan){
+
+            System.out.println("Enter your new loaction: ");
+            String newloc=scan.nextLine();
+
         }
 }

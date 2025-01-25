@@ -6,7 +6,7 @@ public class BookMyShowActions {
 
     public static void start(Scanner scan){
         BookMyShow.getAdmins().add(new Admin("Ad01","123"));
-        BookMyShow.getUsers().add(new User("u1","1"));
+        BookMyShow.getUsers().add(new User("u1","cbe","1"));
 
         while(true){
             System.out.println("1.Admin\n2.User\n3.Exit\nYou are: ");

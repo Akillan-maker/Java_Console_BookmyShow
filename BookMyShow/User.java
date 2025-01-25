@@ -3,10 +3,12 @@ package BookMyShow;
 public class User {
     public String userId;
     public String userPass;
+    public String userLoc;
 
-    public User(String userId,String userPass){
+    public User(String userId,String userLoc,String userPass){
 
         this.userId=userId;
+        this.userLoc=userLoc;
         this.userPass=userPass;
     }
 
@@ -17,4 +19,9 @@ public class User {
     public String getUserPass() {
         return userPass;
     }
+
+    public String getUserLoc() {
+        return userLoc;
+    }
+
 }
