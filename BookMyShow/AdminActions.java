@@ -40,7 +40,6 @@ public class AdminActions {
                 case 1:
                     AdminActions.addLocations(scan);
                     break;
-
                 case 2:
                     AdminActions.addTheatre(scan);
                     break;
@@ -55,7 +54,7 @@ public class AdminActions {
                     break;
                 case 6:
                     System.out.println("Logging out...");
-                    break;
+                    return;
                 default:
                     System.out.println("Ivalid choice...Retry");
             }
@@ -164,7 +163,7 @@ public class AdminActions {
         System.out.println("Movie duration: ");
         Long duration = Long.parseLong(scan.nextLine());
         i = 1;
-        HashMap<String,ArrayList<Movies>> moviesHashMap=new HashMap<>();
+//        HashMap<String,ArrayList<Movies>> moviesHashMap=new HashMap<>();
         System.out.println("*** Available Theatres ***");
         for (var theatre : BookMyShow.getTheatreHashMap().keySet()) {
             if (BookMyShow.getTheatreHashMap().get(theatre).getLocation().equals(locmovie)) {
@@ -204,23 +203,36 @@ public class AdminActions {
             break;
         }
         var screen1 = theatre1.getScreensHashMap().get(sname);
+        LocalTime stime=null;
+        LocalTime etime=null;
+        LocalDate dshow=null;
+        Show show1;
+        m:while(true){
+            System.out.println("Enter start time: ");
+            stime = LocalTime.parse(scan.nextLine(), BookMyShow.getTimeFormatter());
+            System.out.println("End time -> ");
+            etime = stime.plusMinutes(duration + 30);
+            System.out.println("Enter show date: ");
+            dshow = LocalDate.parse(scan.nextLine(), BookMyShow.getDateTimeFormatter());
 
-        System.out.println("Enter start time: ");
-        LocalTime stime = LocalTime.parse(scan.nextLine(), BookMyShow.getTimeFormatter());
-        System.out.println("End time -> ");
-        LocalTime etime = stime.plusMinutes(duration + 30);
-        System.out.println("Enter show date: ");
-        LocalDate dshow = LocalDate.parse(scan.nextLine(), BookMyShow.getDateTimeFormatter());
-
-        Show show1 = new Show(stime, etime, dshow, screen1);
-//        if(screen1.getShows().equals(show1)){
-//            System.out.println("Show Already exists...");
-//            continue;
-//        }
+            for(var shows:screen1.getShows()){
+                if(shows.getDateofshow().equals(dshow)){
+                    if(!shows.getStarttime().isBefore(stime)&&shows.getEndtime().isBefore(stime)
+                            ||!shows.getStarttime().isAfter(etime)&&shows.getEndtime().isAfter(etime)){
+                        System.out.println("Show Already exists...");
+                        continue m;
+                    }
+                }
+            }
+            show1 = new Show(stime, etime, dshow, screen1);
+            if(screen1.getShows().contains(show1)){
+                System.out.println("Show Already exists...");
+                continue;
+            }
+            break;
+        }
         screen1.getShows().add(show1);
-
         Movies movie1 = new Movies(mname, locmovie, date, duration, theatre1, screen1, show1);
-
         var movies=BookMyShow.getMoviesHashMap().get(mname);
         if(movies==null){
             movies=new ArrayList<>();

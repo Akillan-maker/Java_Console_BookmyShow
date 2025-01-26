@@ -27,6 +27,7 @@ public class BookMyShowActions {
 
                         break;
                     }
+                    UserActions.showMovies(scan,us);
                     break;
 
                 case 3:

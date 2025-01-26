@@ -13,7 +13,7 @@ public class BookMyShow {
     public static HashMap<String,Theatre> theatreHashMap=new HashMap<>();
     public static HashMap<String,ArrayList<Movies>> moviesHashMap=new HashMap<>();
     public static DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    public static DateTimeFormatter timeFormatter=DateTimeFormatter.ofPattern("h:mm");
+    public static DateTimeFormatter timeFormatter=DateTimeFormatter.ofPattern("HH:mm");
 
     public static HashMap<String,Theatre> getTheatreHashMap() {
 

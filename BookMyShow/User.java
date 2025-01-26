@@ -24,4 +24,7 @@ public class User {
         return userLoc;
     }
 
+    public void setUserLoc(String userLoc) {
+        this.userLoc = userLoc;
+    }
 }
