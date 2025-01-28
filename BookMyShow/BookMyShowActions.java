@@ -24,7 +24,6 @@ public class BookMyShowActions {
                 case 2:
                     User us=UserActions.userLog(scan);
                     if(us==null){
-
                         break;
                     }
                     UserActions.showMovies(scan,us);
@@ -32,10 +31,10 @@ public class BookMyShowActions {
 
                 case 3:
                     System.out.println("Quiting...");
-                    break;
-
+                    return;
                 default:
                     System.out.println("Invalid choice...");
+                    break;
             }
 
         }

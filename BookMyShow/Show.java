@@ -46,4 +46,8 @@ public class Show {
         return Objects.equals(this.starttime, show.starttime) && Objects.equals(this.endtime, show.endtime) && Objects.equals(dateofshow,show.getDateofshow());
 
     }
+    @Override
+    public String toString() {
+        return  starttime.toString();
+    }
 }

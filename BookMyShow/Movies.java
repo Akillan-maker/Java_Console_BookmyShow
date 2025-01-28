@@ -57,4 +57,10 @@ public class Movies {
         return screens;
 
     }
+
+    public Show getShow() {
+
+        return show;
+
+    }
 }

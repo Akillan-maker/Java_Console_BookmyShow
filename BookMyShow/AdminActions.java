@@ -239,6 +239,7 @@ public class AdminActions {
         }
         movies.add(movie1);
         BookMyShow.getMoviesHashMap().put(mname,movies);
+        System.out.println("Movie Added Successfully...");
     }
 
     public static void viewTheatres() {
@@ -265,6 +266,11 @@ public class AdminActions {
             }
             System.out.println(i+"."+" "+mov);
             i++;
+            var movshows=BookMyShow.getMoviesHashMap().get(mov);
+            for(var m:movshows){
+                System.out.println("Theatre: "+m.getTheatre().getTheatreName());
+                System.out.println("Shows: "+m.getShow().getStarttime());
+            }
         }
     }
 }
