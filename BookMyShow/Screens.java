@@ -40,4 +40,8 @@ public class Screens {
         return no_seats;
 
     }
+
+    public String getGrids() {
+        return grids;
+    }
 }

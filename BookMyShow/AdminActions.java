@@ -99,7 +99,7 @@ public class AdminActions {
                     System.out.println("No.of Screens: ");
                     srcs = Integer.parseInt(scan.nextLine());
                     if (srcs == 0) {
-                        System.out.println("");
+                        System.out.println("Enter screen atleast one or more...");
                         continue;
                     }
                     break;
@@ -206,7 +206,9 @@ public class AdminActions {
         LocalTime stime=null;
         LocalTime etime=null;
         LocalDate dshow=null;
+        HashMap<Character, ArrayList<String>> seatsofshow=null;
         Show show1;
+        Show generateseats;
         m:while(true){
             System.out.println("Enter start time: ");
             stime = LocalTime.parse(scan.nextLine(), BookMyShow.getTimeFormatter());
@@ -224,7 +226,9 @@ public class AdminActions {
                     }
                 }
             }
-            show1 = new Show(stime, etime, dshow, screen1);
+
+            seatsofshow=Utilities.grids(screen1.getNo_seats(),screen1.getGrids());
+            show1 = new Show(stime, etime, dshow, screen1,seatsofshow);
             if(screen1.getShows().contains(show1)){
                 System.out.println("Show Already exists...");
                 continue;

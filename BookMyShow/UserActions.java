@@ -2,10 +2,7 @@ package BookMyShow;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class UserActions {
@@ -126,36 +123,118 @@ public class UserActions {
                     }
                 }
             }
-                for(String out:stringHashSetHashMap.keySet()){
-                    System.out.println("Theatre: "+out);
-                    var cobj=stringHashSetHashMap.get(out);
-                    for(var s:cobj){
-                        System.out.println("Shows:"+s.toString());
-                    }
+            for(String out:stringHashSetHashMap.keySet()){
+                System.out.println("Theatre: "+out);
+                var cobj=stringHashSetHashMap.get(out);
+                for(var s:cobj){
+                    System.out.println("Shows:"+s.toString());
                 }
-                HashSet<Show> shows=new HashSet<>();
-                LocalTime showtime=null;
-                while(true){
-                    System.out.println("Enter Theatre name: ");
-                    String tname=scan.nextLine();
-
-                    System.out.println("Enter Show time: ");
-                    showtime= LocalTime.parse(scan.nextLine(),BookMyShow.getTimeFormatter());
-                    if(!stringHashSetHashMap.containsKey(tname)){
-                        System.out.println("No Theatre found...");
+            }
+            HashSet<Show> shows=new HashSet<>();
+            LocalTime showtime=null;
+            Show curShow = null;
+            while(true){
+                System.out.println("Enter Theatre name: ");
+                String tname=scan.nextLine();
+                if(!stringHashSetHashMap.containsKey(tname)){
+                    System.out.println("No Theatre found...");
+                    continue;
+                }
+                shows=stringHashSetHashMap.get(tname);
+                System.out.println("Enter Show time: ");
+                showtime= LocalTime.parse(scan.nextLine(),BookMyShow.getTimeFormatter());
+                for(var s:shows){
+                    if(!s.getStarttime().equals(showtime) && !s.getDateofshow().equals(userdate)){
+                        System.out.println("No shows found");
                         continue;
                     }
-                    shows=stringHashSetHashMap.get(tname);
+                    curShow=s;
+                }
+                break;
+            }
+            var seatstobook=curShow.getSeatsofshow();
+            for(var seats:seatstobook.entrySet()){
+                System.out.println(seats.getKey()+" "+seats.getValue());
+            }
+            System.out.println("Enter seat_no to book: ");
+            int numberOfseats =Integer.parseInt(scan.nextLine());
+            ArrayList<String> allSeatstobook=new ArrayList<>();
+            HashMap<Character,ArrayList<String>> dupseatsandGrids=new HashMap<>();
+            for (var sh:curShow.getSeatsofshow().entrySet()){
+                dupseatsandGrids.put(sh.getKey(),new ArrayList<>());
+                dupseatsandGrids.get(sh.getKey()).addAll(sh.getValue());
+            }
+            for(int i=1;i<=numberOfseats;i++){
+                dupseatsandGrids = UserActions.bookTickets(scan,i,curShow,allSeatstobook,dupseatsandGrids);
+            }
+            System.out.println("Confirm your Booking (y/n): ");
+            String confirm=scan.nextLine();
+            switch (confirm){
+                case "y":
+                    curShow.setSeatsofshow(dupseatsandGrids);
+                    System.out.println("Booking Successful...");
+                    for(var originalseatsbooked:curShow.getSeatsofshow().entrySet()){
+                        System.out.println(originalseatsbooked.getKey()+" "+originalseatsbooked.getValue());
+                    }
+                    break;
+                case "n":
+                    System.out.println("Booking cancelled Successfully...");
+                    break;
+            }
+    }
+
+
+    public static HashMap<Character,ArrayList<String>> bookTickets(Scanner scan,int i,Show cshow,ArrayList<String> allseatstobook, HashMap<Character,ArrayList<String>> dupseats){
+
+        while(true){
+            System.out.println("Enter seat_no "+i+": ");
+            String seat_no=scan.nextLine();
+            if(allseatstobook.contains(seat_no)){
+                System.out.println("Seat Already Booked...");
+                continue;
+            }
+            Character rowName=seat_no.charAt(0);
+            int seat =Integer.parseInt(seat_no.substring(1));
+            var allRows=dupseats.keySet();
+            if (allRows.contains(rowName)) {
+                if(seat>dupseats.get(rowName).size()){
+                    System.out.println("Unavailable seat...");
+                    continue;
+                }
+                String seatGird=cshow.getScreens().getGrids();
+                var spaceseat=seatGird.split("\\*");
+                int sumofGrids=0;
+                for(String nofSeats:spaceseat){
+                    sumofGrids += Integer.parseInt(nofSeats);
+                }
+                String index1 =spaceseat[0];
+                String index2=spaceseat[2];
+                if(seat<Integer.parseInt(index1)){
+                    dupseats.get(rowName).set(seat-1,"X");
+                    System.out.println(dupseats.get(rowName));
+                    allseatstobook.add(seat_no);
                     break;
                 }
-                for(var s:shows){
-                    if(s.getStarttime().equals(showtime) && s.getDateofshow().equals(userdate)){
-
-                        var curshow=s;
-                    }
+                else if(seat>Integer.parseInt(index2)){
+                    dupseats.get(rowName).set(seat+1,"X");
+                    System.out.println(dupseats.get(rowName));
+                    allseatstobook.add(seat_no);
+                    break;
                 }
-                System.out.println("No shows found");
-                return;
+               else {
+                    dupseats.get(rowName).set(seat,"X");
+                    System.out.println(dupseats.get(rowName));
+                    allseatstobook.add(seat_no);
+                    break;
+                }
+            }
+            System.out.println("no rows found");
+        }
+        return dupseats;
+    }
+
+    public static void Ticket(){
+
     }
 }
 

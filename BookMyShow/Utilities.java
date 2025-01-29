@@ -28,7 +28,7 @@ public class Utilities {
                         int noOfelement = Integer.parseInt(gridss[col]);
                         for(int element = 0; element<noOfelement; element++)
                         {
-                            seats.add("__");
+                            seats.add("___");
                         }
                         if(col<gridss.length-1)
                         {
