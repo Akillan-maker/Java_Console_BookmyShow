@@ -3,15 +3,15 @@ package BookMyShow;
 import java.time.LocalDate;
 
 public class Movies {
-    String moviename;
-    LocalDate date;
-    String location;
-    long duration;
-    Theatre theatre;
-    Screens screens;
-    Show show;
+    String moviename;    // To store movie name
+    LocalDate date;        // To store movie date
+    String location;    // To store location
+    long duration;         // To store movie duration
+    Theatre theatre;         // To get theatre reference
+    Screens screens;      // To get screen reference
+    Show show;         // To get show reference
 
-    public Movies(String moviename,String location,LocalDate date,long duration,Theatre theatre,Screens screens,Show show){
+    public Movies(String moviename,String location,LocalDate date,long duration,Theatre theatre,Screens screens,Show show){   // Creating a movie constructor and passing parameters
 
         this.moviename=moviename;
         this.location=location;
@@ -34,12 +34,6 @@ public class Movies {
 
     }
 
-    public long getDuration() {
-
-        return duration;
-
-    }
-
     public LocalDate getDate() {
 
         return date;
@@ -49,12 +43,6 @@ public class Movies {
     public Theatre getTheatre() {
 
         return theatre;
-
-    }
-
-    public Screens getScreens() {
-
-        return screens;
 
     }
 

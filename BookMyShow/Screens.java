@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class Screens {
-    String screen_no;
-    int no_seats;
-    String grids;
-    public HashMap<Character, ArrayList<String>> nseats=new HashMap<>();
-    public HashSet<Show> shows=new HashSet<>();
+    String screen_no;      // To store screen name
+    int no_seats;       // To store total number of seats
+    String grids;         // To store grid
+    public HashMap<Character, ArrayList<String>> nseats=new HashMap<>();  // To store rows as keys and its seats as ArrayList
+    public HashSet<Show> shows=new HashSet<>();      // To store show objects
 
-    public Screens(String screen_no, int no_seats,String grids,HashMap<Character,ArrayList<String>> nseats){
+    public Screens(String screen_no, int no_seats,String grids,HashMap<Character,ArrayList<String>> nseats){      // Creating a screen constructor
 
         this.grids=grids;
         this.nseats=nseats;

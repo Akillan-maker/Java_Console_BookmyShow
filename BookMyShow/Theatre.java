@@ -1,16 +1,14 @@
 package BookMyShow;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Theatre {
-    public String theatreName;
-    public String location;
-    public  HashMap<String,Screens> screensHashMap=new HashMap<>();
+    public String theatreName;        // To store theatre name
+    public String location;        // To store theatre location
+    public  HashMap<String,Screens> screensHashMap=new HashMap<>();    // To store screen name and its objects
 
-    public Theatre(String theatreName,String location,HashMap<String,Screens> screensHashMap){
+    public Theatre(String theatreName,String location,HashMap<String,Screens> screensHashMap){       // Creating theatre constructor
 
-//        this.screens=screens;
         this.screensHashMap=screensHashMap;
         this.theatreName=theatreName;
         this.location=location;
