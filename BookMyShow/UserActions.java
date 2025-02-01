@@ -113,18 +113,19 @@ public class UserActions {
 
                         System.out.println("Location: ");
                         String newloc=scan.nextLine();     // To get new location
-                        for(var u:BookMyShow.getUsers()){       // Loops over user ArrayList
-                            if(u.getUserId().equals(curuser.getUserId())){     // Checks the user id matches
-                                u.setUserLoc(newloc);   // Sets the new location in current user location
-                            }
-                        }
+                        curuser.setUserLoc(newloc);     // Sets new location
                         break;
 
                     // Case to book tickets
                     case "book":    // If user choice is "book"
 
                         theatreandshows(scan,curuser,moviesinarea,sdate);    // Calls theatreandshows function
-                        break;
+                        if(theatreandshows(scan,curuser,moviesinarea,sdate)){
+
+                            afterbookOptions(scan,curuser);
+                            
+                            break;
+                        }
 
                     // Case to exit
                     case "exit":    // If user choice is "exit"
@@ -135,7 +136,7 @@ public class UserActions {
             }
         }
 
-        public static void theatreandshows(Scanner scan,User curuser,ArrayList<Movies> moviesinarea,LocalDate userdate){       // Function that deals with theatre,shows and booking
+        public static boolean theatreandshows(Scanner scan, User curuser, ArrayList<Movies> moviesinarea, LocalDate userdate){       // Function that deals with theatre,shows and booking
 
             HashMap<String, HashSet<Show>> theateandShowsHashMap =new HashMap<>();      // Creating a new HashMap to store theatre and its object
             String bookmov;      // To store movie name to book
@@ -221,7 +222,27 @@ public class UserActions {
                     curShow.setSeatsofshow(dupseatsandGrids);      // Sets dupseatsandGrids to seatsofshow
                     numofbookesSeats = bookedSeats.size();      //  Getting number of booked seats
                     totalPrice= (long) numofbookesSeats *190;      // Calculating total ticket price
+
+                    // Creating a new ticket object and pasing inside ArrayList
+                    curuser.getTicketArrayList().add(new Ticket(theatreName,curShow.getDateofshow(),curShow.getScreens().getScreen_no(),bookmov,curShow.getStarttime(),totalPrice, numofbookesSeats, bookedSeats));
                     System.out.println("Booking Successful...");
+
+                    // Printing ticket
+                    System.out.println("Your Ticket: \n");
+                    System.out.println("*************** "+theatreName+" ***************");
+
+                    System.out.println("Date: "+curShow.getDateofshow()+"          "+"Time: "+curShow.getStarttime());
+                    System.out.println("  ------------ "+bookmov+" ------------");
+                    System.out.println(" ******* ScreenName: "+curShow.getScreens().getScreen_no()+" *******");
+                    System.out.println("No.of Seats: "+ numofbookesSeats);
+                    for(String s: bookedSeats){
+                        System.out.print(s+",");
+
+                    }
+                    System.out.println();
+                    System.out.println("                                       Total Amount: "+totalPrice);
+                    System.out.println();
+                    System.out.println("**************** Booked Ticket *********************");
                     for(var originalseatsbooked:curShow.getSeatsofshow().entrySet()){    // Loops over seatsofshow
                         System.out.println(originalseatsbooked.getKey()+" "+originalseatsbooked.getValue());
                     }
@@ -232,50 +253,34 @@ public class UserActions {
                     System.out.println("Booking cancelled Successfully...");
                     break;
             }
+            return true;
 
-            // Creating a new ticket object and pasing inside ArrayList
-            curuser.getTicketArrayList().add(new Ticket(theatreName,curShow.getDateofshow(),curShow.getScreens().getScreen_no(),bookmov,curShow.getStarttime(),totalPrice, numofbookesSeats, bookedSeats));
+    }
 
-            // Printing ticket
-            System.out.println("Ticket: \n");
-            System.out.println("*************** "+theatreName+" ***************");
+    public static void afterbookOptions(Scanner scan,User curuser){
 
-            System.out.println("Date: "+curShow.getDateofshow()+"          "+"Time: "+curShow.getStarttime());
-            System.out.println("  ------------ "+bookmov+" ------------");
-            System.out.println(" ******* ScreenName: "+curShow.getScreens().getScreen_no()+" *******");
-            System.out.println("No.of Seats: "+ numofbookesSeats);
-            for(String s: bookedSeats){
-                System.out.print(s+",");
+        System.out.println("Do you want to 1) Continue booking\n2) view Ticket\n3) Exit\n");
+        int ch=Integer.parseInt(scan.nextLine());     // To gte user choice
+        switch (ch){
 
-            }
-            System.out.println();
-            System.out.println("                                       Total Amount: "+totalPrice);
-            System.out.println();
-            System.out.println("**************** Booked Ticket *********************");
+            // Case to continue booking
+            case 1:   // If user choice is 1
 
+                showMovies(scan,curuser);     // Calls showMovies
+                break;
 
-            System.out.println("Do you want to 1) Continue booking\n2) view Ticket\n3) Exit\n");
-            int ch=Integer.parseInt(scan.nextLine());     // To gte user choice
-            switch (ch){
+            // Case to view tickets
+            case 2:      // If user choice is 2
 
-                // Case to continue booking
-                case 1:   // If user choice is 1
+                viewTicket(curuser);      // Calls viewTicket
+                break;
 
-                    showMovies(scan,curuser);     // Calls showMovies
-                    break;
+            // Case to exit
+            case 3:     // If user choice is 3
 
-                // Case to view tickets
-                case 2:      // If user choice is 2
-
-                    viewTicket(curuser);      // Calls viewTicket
-                    break;
-
-                // Case to exit
-                case 3:     // If user choice is 3
-
-                    System.out.println("Logging out...");
-                    break;
-            }
+                System.out.println("Logging out...");
+                break;
+        }
 
     }
 

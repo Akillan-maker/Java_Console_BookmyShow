@@ -98,28 +98,32 @@ public class AdminActions {
         System.out.println("Location: ");
         String loc = scan.nextLine();        // To get the location
         int srcs = 0;     // To store number of screens to add
+        boolean bb =false;
 
         for (String l : BookMyShow.getLocations()) {    // Loops over location ArrayList
             if (l.equals(loc)) {        // Checks wheather the location is available
-
-                while (true) {        // Loops until the number of screen is greater than 0
-                    System.out.println("No.of Screens: ");
-                    srcs = Integer.parseInt(scan.nextLine());   // To get the number of screens and converting it into Integer
-                    if (srcs == 0) {     // Checks if no.of screens is 0
-                        System.out.println("Enter screen atleast one or more...");
-                        continue;    // Continue the loop
-                    }
-                    break;    // Breaks the while loop
-                }
-                HashMap<String, Screens> screensHashMap = new HashMap<>();   // To get the screen objects
-                for (int i = 1; i <= srcs; i++) {      // Loops till i becomes false
-                    AdminActions.addScreen(scan,i,screensHashMap);   // Calls the method
-                }
-                Theatre theatres = new Theatre(tname, loc, screensHashMap);   // Creating a new theatre object and stores information
-                BookMyShow.getTheatreHashMap().put(tname, theatres);   // Put the theatre name and object inside theatre HashMap
-                System.out.println("Theatre Added Successfully...");
-                return;
+                bb=true;
+                break;
             }
+        }
+        if(bb){
+            while (true) {        // Loops until the number of screen is greater than 0
+                System.out.println("No.of Screens: ");
+                srcs = Integer.parseInt(scan.nextLine());   // To get the number of screens and converting it into Integer
+                if (srcs == 0) {     // Checks if no.of screens is 0
+                    System.out.println("Enter screen atleast one or more...");
+                    continue;    // Continue the loop
+                }
+                break;    // Breaks the while loop
+            }
+            HashMap<String, Screens> screensHashMap = new HashMap<>();   // To get the screen objects
+            for (int i = 1; i <= srcs; i++) {      // Loops till i becomes false
+                AdminActions.addScreen(scan,i,screensHashMap);   // Calls the method
+            }
+            Theatre theatres = new Theatre(tname, loc, screensHashMap);   // Creating a new theatre object and stores information
+            BookMyShow.getTheatreHashMap().put(tname, theatres);   // Put the theatre name and object inside theatre HashMap
+            System.out.println("Theatre Added Successfully...");
+            return;
         }
         System.out.println("Location Not Found...");
     }
