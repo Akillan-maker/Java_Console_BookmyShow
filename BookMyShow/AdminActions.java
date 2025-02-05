@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class AdminActions {
 
 
-    public static Admin adminLog(Scanner scan) {             // Checks the login conditions
+    public static Admin adminLogin(Scanner scan) {             // Checks the login conditions
 
         System.out.println("Admin ID: ");
         String adminname = scan.nextLine();       // To get admin id
@@ -96,31 +96,31 @@ public class AdminActions {
         }
 
         System.out.println("Location: ");
-        String loc = scan.nextLine();        // To get the location
-        int srcs = 0;     // To store number of screens to add
-        boolean bb =false;
+        String location = scan.nextLine();        // To get the location
+        int screens = 0;     // To store number of screens to add
+        boolean locationFound =false;
 
         for (String l : BookMyShow.getLocations()) {    // Loops over location ArrayList
-            if (l.equals(loc)) {        // Checks wheather the location is available
-                bb=true;
+            if (l.equals(location)) {        // Checks wheather the location is available
+                locationFound =true;
                 break;
             }
         }
-        if(bb){
+        if(locationFound){
             while (true) {        // Loops until the number of screen is greater than 0
                 System.out.println("No.of Screens: ");
-                srcs = Integer.parseInt(scan.nextLine());   // To get the number of screens and converting it into Integer
-                if (srcs == 0) {     // Checks if no.of screens is 0
+                screens = Integer.parseInt(scan.nextLine());   // To get the number of screens and converting it into Integer
+                if (screens == 0) {     // Checks if no.of screens is 0
                     System.out.println("Enter screen atleast one or more...");
                     continue;    // Continue the loop
                 }
                 break;    // Breaks the while loop
             }
             HashMap<String, Screens> screensHashMap = new HashMap<>();   // To get the screen objects
-            for (int i = 1; i <= srcs; i++) {      // Loops till i becomes false
+            for (int i = 1; i <= screens; i++) {      // Loops till i becomes false
                 AdminActions.addScreen(scan,i,screensHashMap);   // Calls the method
             }
-            Theatre theatres = new Theatre(tname, loc, screensHashMap);   // Creating a new theatre object and stores information
+            Theatre theatres = new Theatre(tname, location, screensHashMap);   // Creating a new theatre object and stores information
             BookMyShow.getTheatreHashMap().put(tname, theatres);   // Put the theatre name and object inside theatre HashMap
             System.out.println("Theatre Added Successfully...");
             return;
@@ -130,15 +130,15 @@ public class AdminActions {
 
     public static void addScreen(Scanner scan,int i, HashMap<String, Screens> screensHashMap) {   // To add screens
 
-        String src;    // To store screen name
+        String screen;    // To store screen name
         int seats=0;   // To store total seats in screen
         String grids;    // To divide the seats into grids
         HashMap<Character, ArrayList<String>> nseats;   // To store rowname and seats pattern
         while(true){    // Loops until the screen is added
             System.out.println("Screen "+i+" name: ");
-            src = scan.nextLine();    // To get the screen name
+            screen = scan.nextLine();    // To get the screen name
             var screenKeys = screensHashMap.keySet();   // Storing keys og screen HashMap as ArrayList
-            if (screenKeys.contains(src)) {      // Checks if ArrayList contains key
+            if (screenKeys.contains(screen)) {      // Checks if ArrayList contains key
                 System.out.println("Screen Already exists...");
                 continue;     // If found then continue
             }
@@ -155,8 +155,8 @@ public class AdminActions {
             }
             break;    // Breaks the while loop
         }
-        Screens scrObj = new Screens(src, seats, grids, nseats);   // Creating a new screen object
-        screensHashMap.put(src, scrObj);      // Passing the key and object in HashMap
+        Screens scrObj = new Screens(screen, seats, grids, nseats);   // Creating a new screen object
+        screensHashMap.put(screen, scrObj);      // Passing the key and object in HashMap
     }
 
     public static void addMovie(Scanner scan) {    // To add movies
@@ -216,8 +216,8 @@ public class AdminActions {
         while (true) {    // Loops until correct input of screen
             System.out.println("Enter screen to add movie: ");
             sname = scan.nextLine();   // To get screen name
-            var sc = theatre1.getScreensHashMap().keySet();  // To store screen name in a ArrayLists
-            if (!sc.contains(sname)) {          // Checks wheather sc ArrayList does not contain
+            var screens = theatre1.getScreensHashMap().keySet();  // To store screen name in a ArrayLists
+            if (!screens.contains(sname)) {          // Checks wheather sc ArrayList does not contain
                 System.out.println("No screens found...");
                 continue;       // Continues while loop
             }
@@ -229,7 +229,7 @@ public class AdminActions {
         LocalDate dshow;               // To store date
         HashMap<Character, ArrayList<String>> seatsofshow;   //  To store seats and grids
         Show show1;           // to store current show object
-//        Show generateseats;
+
         m:while(true){                  // Loops until the current show is added
             System.out.println("Enter start time: ");
             stime = LocalTime.parse(scan.nextLine(), BookMyShow.getTimeFormatter());     // To get start time of show
@@ -270,13 +270,17 @@ public class AdminActions {
 
         int i = 1;
         System.out.println("*** Available Theatres ***");
+        var availablemov=BookMyShow.getTheatreHashMap().keySet();
+        if (BookMyShow.getTheatreHashMap().isEmpty()) {        // Checks null1
+            System.out.println("No Theatres Found...");
+            return;       // return if null found
+        }
+
         for (String theatre : BookMyShow.getTheatreHashMap().keySet()) {   // Loops over the theatre HashMap and get its keys
             Theatre ctheatre=BookMyShow.getTheatreHashMap().get(theatre);     // To get and store the key's object
-            if (theatre == null) {        // Checks null
-                System.out.println("No Theatres Found...");
-                return;       // return if null found
-            }
+
             System.out.println(i + ")" + "Theatre name: " + theatre);
+            System.out.println("Location >"+ctheatre.getLocation());
             System.out.println("Screens >"+ctheatre.getScreensHashMap().keySet());
             i++;
         }
@@ -286,17 +290,21 @@ public class AdminActions {
 
         int i=1;
         System.out.println("*** Available Movies ***");
-        for(String mov:BookMyShow.getMoviesHashMap().keySet()){        // Loops over movie HashMap and gets keys
-            if(mov == null){          // Checks for null
+
+            if(BookMyShow.getMoviesHashMap().isEmpty()){          // Checks for null
                 System.out.println("No Movies Found...");
                 return;      // Returns if null
             }
-            System.out.println(i+") "+mov);
+
+        for(String mov:BookMyShow.getMoviesHashMap().keySet()) {        // Loops over movie HashMap and gets keys
+            System.out.println(i + ") " + mov);
+            System.out.println("Location: ");
             i++;
-            var movshows=BookMyShow.getMoviesHashMap().get(mov);      // To get and store movie object
-            for(var m:movshows){            // Loops over the movie object ArrayList
-                System.out.println("Theatre: "+m.getTheatre().getTheatreName());
-                System.out.println("Shows: "+m.getShow().getStarttime());
+            var movshows = BookMyShow.getMoviesHashMap().get(mov);      // To get and store movie object
+            for (var m : movshows) {            // Loops over the movie object ArrayList
+                System.out.println("Theatre: " + m.getTheatre().getTheatreName());
+                System.out.println("Location: " + m.getTheatre().getLocation());
+                System.out.println("Shows: " + m.getShow().getStarttime());
             }
         }
     }

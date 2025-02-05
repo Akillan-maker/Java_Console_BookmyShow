@@ -6,7 +6,6 @@ public class BookMyShowActions {
 
     public static void start(Scanner scan){
         BookMyShow.getAdmins().add(new Admin("Ad01","123"));          // Default admin object add when code begins
-        BookMyShow.getUsers().add(new User("U1","1","cbe"));
 
         while(true){             // Loops until user exists
             System.out.println("1.Admin\n2.User\n3.Exit\nYou are: ");
@@ -15,15 +14,15 @@ public class BookMyShowActions {
             switch (choice){
 
                 case 1:         // If user choice is 1
-                    Admin ad= AdminActions.adminLog(scan);    // Calls admin login
-                    if(ad==null){
+                    Admin admin= AdminActions.adminLogin(scan);    // Calls admin login
+                    if(admin==null){
                         break;
                     }
                     AdminActions.adminOptions(scan);    // Calls if admin login success
                     break;
 
                 case 2:    // If user choice is 2
-                    User us=UserActions.userLog(scan);    // Calls user login
+                    User us=UserActions.userLogin(scan);    // Calls user login
                     if(us==null){
                         break;
                     }

@@ -6,7 +6,7 @@ import java.util.*;
 
 public class UserActions {
 
-    public static User userLog(Scanner scan){      // Function for user login
+    public static User userLogin(Scanner scan){      // Function for user login
 
         System.out.println("*** Menu ***\n1. Sign in\n2. Sign up\n3. Exit");
         int ch=Integer.parseInt(scan.nextLine());        // To get the user choice
@@ -39,18 +39,20 @@ public class UserActions {
                 System.out.println("Enter new User ID: ");
                 String newusname=scan.nextLine();       // To get new user id
                 for(User user:BookMyShow.getUsers()){         // Loops over user ArrayList
-                    if(!user.getUserId().equals(newusname)){       // Checks for new user id
-                        System.out.println("Enter your location: ");
-                        userloc=scan.nextLine();     // To get location
-                        System.out.println("New Password: ");
-                        String newpass=scan.nextLine();    // To get new password
-                        BookMyShow.getUsers().add(new User(newusname,newpass,userloc));     // Adding new user object in user ArrayList
-                        System.out.println("Account Created Successfully...");
-                        return null;
+                    if(user.getUserId().equals(newusname)){       // Checks for new user id
+
+                        System.out.println("User ID Already Exitsts...");
+                        return null;   // Breaks if new user id already exists
+
                     }
                 }
-                System.out.println("User ID Already Exitsts...");
-                break;   // Breaks if new user id already exists
+                System.out.println("Enter your location: ");
+                userloc=scan.nextLine();     // To get location
+                System.out.println("New Password: ");
+                String newpass=scan.nextLine();    // To get new password
+                BookMyShow.getUsers().add(new User(newusname,newpass,userloc));     // Adding new user object in user ArrayList
+                System.out.println("Account Created Successfully...");
+                return null;
 
             // Case to exit
             case 3:
@@ -81,10 +83,10 @@ public class UserActions {
                 ArrayList<Movies> moviesinarea =new ArrayList<>();      // Creating a new ArrayList to store movies in current location
                 boolean y=false;
                 for(String m:mlist){     // Loops over movie name ArrayList
-                    for(Movies mo:BookMyShow.getMoviesHashMap().get(m)){     // Loops movie HashMap and gets object of that movie
-                        if(mo.getLocation().equals(curuser.getUserLoc()) && mo.getDate().equals(sdate)){    // Checks if the movie location and movie date matches user location and user date respectively
+                    for(Movies movies:BookMyShow.getMoviesHashMap().get(m)){     // Loops movie HashMap and gets object of that movie
+                        if(movies.getLocation().equals(curuser.getUserLoc()) && movies.getDate().equals(sdate)){    // Checks if the movie location and movie date matches user location and user date respectively
                                 y=true;
-                                moviesinarea.add(mo);   // Adds movie to moviesinares ArrayList
+                                moviesinarea.add(movies);   // Adds movie to moviesinares ArrayList
                         }
                     }
                     if(y){     // Checks if y is true
@@ -119,13 +121,14 @@ public class UserActions {
                     // Case to book tickets
                     case "book":    // If user choice is "book"
 
-                        theatreandshows(scan,curuser,moviesinarea,sdate);    // Calls theatreandshows function
-                        if(theatreandshows(scan,curuser,moviesinarea,sdate)){
+                        boolean t=false;
+                        t=theatreandshows(scan,curuser,moviesinarea,sdate);    // Calls theatreandshows function
+                        if(t){
 
-                            afterbookOptions(scan,curuser);
+                            userOptions(scan,curuser);
                             
-                            break;
                         }
+                        break;
 
                     // Case to exit
                     case "exit":    // If user choice is "exit"
@@ -145,27 +148,26 @@ public class UserActions {
                 System.out.println("Enter movie name: ");
                 bookmov=scan.nextLine();     // To get movie name to book
                 for(var mov:moviesinarea) {        // Loops over the moviesinarea ArrayList
-                    if (!mov.getMoviename().equals(bookmov)) {      // Checks if movie name matches
-                        System.out.println("Movie Not Found...");
-                        continue l;     // Continues while loop...labelled bcoz it is nested loop
-                    }
-                    else if (theateandShowsHashMap.containsKey(mov.getTheatre().getTheatreName())) {     // Checks for theatre name in theatreandShows HashMap
-                        theateandShowsHashMap.get(mov.getTheatre().getTheatreName()).add(mov.getShow());     // Gets the theatre name and adds show objects
-                        break;
-                    }
-                    else {
-                        HashSet<Show> shows = new HashSet<>();       // Creates a new HashSet
-                        shows.add(mov.getShow());        // Adding show object inside
-                        theateandShowsHashMap.put(mov.getTheatre().getTheatreName(), shows);   // To pass the theatre name and show objects
+                    if (mov.getMoviename().equals(bookmov)) {      // Checks if movie name matches
+                        if (theateandShowsHashMap.containsKey(mov.getTheatre().getTheatreName())) {     // Checks for theatre name in theatreandShows HashMap
+                            theateandShowsHashMap.get(mov.getTheatre().getTheatreName()).add(mov.getShow());     // Gets the theatre name and adds show objects
+                            break l;
+                        }
+                        else {
+                            HashSet<Show> shows = new HashSet<>();       // Creates a new HashSet
+                            shows.add(mov.getShow());        // Adding show object inside
+                            theateandShowsHashMap.put(mov.getTheatre().getTheatreName(), shows);   // To pass the theatre name and show objects
+                            break l;
+                        }
                     }
                 }
-                break;
+                System.out.println("Movie Not Found...");
             }
 
             for(String out: theateandShowsHashMap.keySet()){       // Loops over theatreandShows HashMap
                 System.out.println("Theatre: "+out);
-                var sobj= theateandShowsHashMap.get(out);       // Gets the show objects and pass into an ArayList
-                for(var s:sobj){             // Loops over sobj ArrayList
+                var showobj= theateandShowsHashMap.get(out);       // Gets the show objects and pass into an ArayList
+                for(var s:showobj){             // Loops over sobj ArrayList
                     System.out.println("Shows:"+s.toString());
                 }
             }
@@ -206,9 +208,9 @@ public class UserActions {
             long totalPrice=0;     // To store totalprice of booked ticket
             int numofbookesSeats = 0;       // To store total number of booked seats
 
-            for (var sh:curShow.getSeatsofshow().entrySet()){       // Loops over SeatsofShow HashMap
-                dupseatsandGrids.put(sh.getKey(),new ArrayList<>());         // Gets the key and creates a new ArrayList and pass into the HashMap
-                dupseatsandGrids.get(sh.getKey()).addAll(sh.getValue());        // Gets the key and adds object into the key's ArrayList
+            for (var showseats :curShow.getSeatsofshow().entrySet()){       // Loops over SeatsofShow HashMap
+                dupseatsandGrids.put(showseats.getKey(),new ArrayList<>());         // Gets the key and creates a new ArrayList and pass into the HashMap
+                dupseatsandGrids.get(showseats.getKey()).addAll(showseats.getValue());        // Gets the key and adds object into the key's ArrayList
             }
             for(int i=1;i<=numberOfseats;i++){        // Loops until i gets equals to number of seats to book
                 dupseatsandGrids = UserActions.bookTickets(scan,i,curShow, bookedSeats,dupseatsandGrids);    // Calls bookTickets function
@@ -243,9 +245,9 @@ public class UserActions {
                     System.out.println("                                       Total Amount: "+totalPrice);
                     System.out.println();
                     System.out.println("**************** Booked Ticket *********************");
-                    for(var originalseatsbooked:curShow.getSeatsofshow().entrySet()){    // Loops over seatsofshow
-                        System.out.println(originalseatsbooked.getKey()+" "+originalseatsbooked.getValue());
-                    }
+//                    for(var originalseatsbooked:curShow.getSeatsofshow().entrySet()){    // Loops over seatsofshow
+//                        System.out.println(originalseatsbooked.getKey()+" "+originalseatsbooked.getValue());
+//                    }
                     break;
 
                 // Case to cancel booked seats
@@ -254,10 +256,9 @@ public class UserActions {
                     break;
             }
             return true;
-
     }
 
-    public static void afterbookOptions(Scanner scan,User curuser){
+    public static void userOptions(Scanner scan,User curuser){
 
         System.out.println("Do you want to 1) Continue booking\n2) view Ticket\n3) Exit\n");
         int ch=Integer.parseInt(scan.nextLine());     // To gte user choice
@@ -350,25 +351,30 @@ public class UserActions {
     public static void viewTicket(User curuser){   // To view booked tickets
 
         int i=1;
-        for(var information:curuser.getTicketArrayList())     // Loops over ticket ArrayList
-        {
-            System.out.println();
-            System.out.println("Ticket "+i+": \n");
-            System.out.println("*************** "+information.getTheatreName()+" ***************");
+        for(var information:curuser.getTicketArrayList()) {    // Loops over ticket ArrayList
+            if(information==null) {
 
-            System.out.println("Date: "+information.getDate()+"          "+"Time: "+information.getTime());
-            System.out.println("  ------------ "+information.getMovieName()+" ------------");
-            System.out.println(" ******* ScreenName: "+information.getScreen()+" *******");
-            System.out.println("No.of Seats: "+information.getTotalSeats());
-            for(String s:information.getTotalSeats()){
-                System.out.print(s+",");
+                System.out.println("No Tickets Found...");
+                break;
 
             }
-            System.out.println();
-            System.out.println("                                   Total Amount: "+information.getPriceofTickets());
-            System.out.println();
-            System.out.println("************ Booked Ticket **************");
-            i++;
+                System.out.println();
+                System.out.println("Ticket " + i + ": \n");
+                System.out.println("*************** " + information.getTheatreName() + " ***************");
+
+                System.out.println("Date: " + information.getDate() + "          " + "Time: " + information.getTime());
+                System.out.println("  ------------ " + information.getMovieName() + " ------------");
+                System.out.println(" ******* ScreenName: " + information.getScreen() + " *******");
+                System.out.println("No.of Seats: " + information.getTotalSeats());
+                for (String s : information.getTotalSeats()) {
+                    System.out.print(s + ",");
+
+                }
+                System.out.println();
+                System.out.println("                                   Total Amount: " + information.getPriceofTickets());
+                System.out.println();
+                System.out.println("************ Booked Ticket **************");
+                i++;
 
         }
 
