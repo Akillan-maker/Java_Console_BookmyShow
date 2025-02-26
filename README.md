@@ -8,11 +8,10 @@ This is a Java-based terminal application modeled after the BookMyShow platform.
  # Features
 > User Authentication
 - User sign-up and login functionality.
-- Secure password storage with encryption.
 
 > Movie Listings
 - Showcase of currently available movies.
-- Movies organized by categories such as genre, language, and release date.
+- Movies organized by categories movie name and release date.
 
 > Theater and Show Management
 - View theaters showing the selected movie.
@@ -26,5 +25,5 @@ This is a Java-based terminal application modeled after the BookMyShow platform.
 - Access to previous booking details and history.
 
 > Admin Panel (Optional for advanced users)
-- Capability to add, modify, or remove movies and shows.
+
 - View booking analytics and statistics.
